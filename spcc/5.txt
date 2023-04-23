@@ -1,0 +1,154 @@
+Implementation of different code optimization techniques
+=======================================
+#include<stdio.h> 
+#include<conio.h> 
+#include<string.h> 
+struct op 
+{ char l; 
+char r[20]; 
+} 
+op[10],pr[10]; 
+void main() 
+{ int a,i,k,j,n,z=0,m,q; 
+char *p,*l; 
+char temp,t; 
+char *tem; 
+printf("Enter the Number of Values:"); 
+scanf("%d",&n); 
+for(i=0;i<n;i++) 
+{ 
+printf("left: "); 
+op[i].l = getch(); 
+printf("\tright: "); 
+scanf("%s",op[i].r); 
+} 
+printf("Intermediate Code\n") ; 
+for(i=0;i<n;i++) 
+{ 
+printf("%c=",op[i].l); 
+printf("%s\n",op[i].r); 
+} 
+for(i=0;i<n-1;i++) 
+{ temp=op[i].l; 
+for(j=0;j<n;j++) 
+{ 
+p=strchr(op[j].r,temp); 
+if(p) 
+{ 
+pr[z].l=op[i].l; 
+strcpy(pr[z].r,op[i].r); 
+z++; }}} 
+pr[z].l=op[n-1].l; 
+strcpy(pr[z].r,op[n-1].r); 
+z++; 
+printf("nAfter Dead Code Eliminationn"); 
+for(k=0;k<z;k++) { 
+printf("%ct=",pr[k].l); 
+printf("%sn",pr[k].r); 
+} 
+for(m=0;m<z;m++) { 
+tem=pr[m].r; 
+for(j=m+1;j<z;j++) { 
+p=strstr(tem,pr[j].r); 
+if(p) { 
+t=pr[j].l; 
+pr[j].l=pr[m].l; 
+for(i=0;i<z;i++) { 
+l=strchr(pr[i].r,t) ; 
+if(l) { 
+a=l-pr[i].r; 
+printf("pos: %d",a); 
+pr[i].r[a]=pr[m].l; }}}}} 
+printf("Eliminate Common Expression\n"); 
+for(i=0;i<z;i++) 
+{ 
+printf("%c\t=",pr[i].l); 
+printf("%s\n",pr[i].r); 
+} 
+for(i=0;i<z;i++) 
+{ 
+for(j=i+1;j<z;j++) 
+{ 
+q=strcmp(pr[i].r,pr[j].r); 
+if((pr[i].l==pr[j].l)&&!q) 
+{ 
+pr[i].l='\0'; 
+strcpy(pr[i].r,'\0'); 
+}}} 
+printf("Optimized Code\n"); 
+for(i=0;i<z;i++) 
+{ if(pr[i].l!='\0') 
+{ 
+printf("%c=",pr[i].l); 
+printf("%s\n",pr[i].r); 
+} 
+} 
+getch(); 
+}
+=================================
+Enter number of values: 4
+1 32
+23 45
+==================================
+#include <stdio.h> // Standard Input-Output library
+#include <conio.h> // Console Input-Output library
+#include <string.h> // String Manipulation library
+
+// Define a structure named "op" with a character "l" and an array of characters "r" with a length of 20
+struct op
+{
+char l;
+char r[20];
+} op[10], pr[10]; // Declare two arrays of structures "op" and "pr" with a length of 10
+
+void main() // The main function
+{
+int a, i, k, j, n, z = 0, m, q; // Declare integers "a", "i", "k", "j", "n", "z", "m", and "q"
+char *p, *l; // Declare two pointers to characters "p" and "l"
+char temp, t; // Declare characters "temp" and "t"
+char *tem; // Declare a pointer to character "tem"
+
+// Print a message and scan an integer input from the user, and assign it to the variable "n"
+printf("Enter the Number of Values:");
+scanf("%d", &n);
+
+// Loop "n" times to get "n" pairs of characters "l" and strings "r" from the user and store them in the "op" array of structures
+for (i = 0; i < n; i++)
+{
+printf("left: ");
+op[i].l = getch(); // Get a character from the console and assign it to "op[i].l"
+printf("\tright: ");
+scanf("%s", op[i].r); // Scan a string input from the user and assign it to "op[i].r"
+}
+
+// Print the "Intermediate Code" message
+printf("Intermediate Code\n");
+
+// Loop "n" times to print "op[i].l" followed by "op[i].r" for each "op" structure in the "op" array
+for (i = 0; i < n; i++)
+{
+printf("%c=", op[i].l);
+printf("%s\n", op[i].r);
+}
+
+// Loop "n-1" times to eliminate dead code
+for (i = 0; i < n - 1; i++)
+{
+temp = op[i].l; // Assign "op[i].l" to "temp"
+for (j = 0; j < n; j++)
+{
+p = strchr(op[j].r, temp); // Find the first occurrence of "temp" in "op[j].r" and assign its pointer to "p"
+if (p) // If "p" is not NULL
+{
+pr[z].l = op[i].l; // Assign "op[i].l" to "pr[z].l"
+strcpy(pr[z].r, op[i].r); // Copy "op[i].r" to "pr[z].r"
+z++; // Increment "z"
+}
+}
+}
+
+pr[z].l = op[n - 1].l; // Assign "op[n-1].l" to "pr[z].l"
+strcpy(pr[z].r, op[n - 1].r); // Copy "op[n-1].r" to "pr[z].r"
+z++; // Increment "z"
+
+// Print the "After Dead Code Elimination" message

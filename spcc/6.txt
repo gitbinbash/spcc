@@ -1,0 +1,111 @@
+Implement Code Generation 
+====================================
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+char op[2],arg1[5],arg2[5],result[5];
+void main()
+{
+ FILE *fp1,*fp2;
+ fp1=fopen("input.txt","r");
+ fp2=fopen("output.txt","w");
+ while(!feof(fp1))
+ {
+ fscanf(fp1,"%s%s%s%s",op,arg1,arg2,result);
+ if(strcmp(op,"+")==0)
+ {
+ fprintf(fp2,"\nMOV R0,%s",arg1);
+ fprintf(fp2,"\nADD R0,%s",arg2);
+ fprintf(fp2,"\nMOV %s,R0",result);
+ }
+ if(strcmp(op,"*")==0)
+ {
+ fprintf(fp2,"\nMOV R0,%s",arg1);
+ fprintf(fp2,"\nMUL R0,%s",arg2);
+ fprintf(fp2,"\nMOV %s,R0",result);
+ }
+ if(strcmp(op,"-")==0)
+ {
+ fprintf(fp2,"\nMOV R0,%s",arg1);
+ fprintf(fp2,"\nSUB R0,%s",arg2);
+ fprintf(fp2,"\nMOV %s,R0",result);
+ }
+ if(strcmp(op,"/")==0)
+ {
+ fprintf(fp2,"\nMOV R0,%s",arg1);
+ fprintf(fp2,"\nDIV R0,%s",arg2);
+ fprintf(fp2,"\nMOV %s,R0",result);
+ }
+if(strcmp(op,"=")==0)
+ {
+ fprintf(fp2,"\nMOV R0,%s",arg1);
+ fprintf(fp2,"\nMOV %s,R0",result);
+ }
+ }
+ fclose(fp1);
+ fclose(fp2);
+ getch();
+ 
+}
+======================================
+input.txt:
++ a b t1
+* c d t2
+- t1 t2 t
+= t ? x
+=====================================
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+
+char op[2],arg1[5],arg2[5],result[5]; // Declare variables to hold operator and operands
+
+void main()
+{
+    FILE *fp1,*fp2; // Declare file pointers
+    fp1=fopen("input.txt","r"); // Open input file in read mode
+    fp2=fopen("output.txt","w"); // Open output file in write mode
+
+    while(!feof(fp1)) // Loop until end of file is reached
+    {
+        fscanf(fp1,"%s%s%s%s",op,arg1,arg2,result); // Read operator and operands from input file
+
+        if(strcmp(op,"+")==0) // If operator is addition
+        {
+            fprintf(fp2,"\nMOV R0,%s",arg1); // Move first operand to register R0
+            fprintf(fp2,"\nADD R0,%s",arg2); // Add second operand to R0
+            fprintf(fp2,"\nMOV %s,R0",result); // Move result to its corresponding memory location
+        }
+
+        if(strcmp(op,"*")==0) // If operator is multiplication
+        {
+            fprintf(fp2,"\nMOV R0,%s",arg1); // Move first operand to register R0
+            fprintf(fp2,"\nMUL R0,%s",arg2); // Multiply R0 by second operand
+            fprintf(fp2,"\nMOV %s,R0",result); // Move result to its corresponding memory location
+        }
+
+        if(strcmp(op,"-")==0) // If operator is subtraction
+        {
+            fprintf(fp2,"\nMOV R0,%s",arg1); // Move first operand to register R0
+            fprintf(fp2,"\nSUB R0,%s",arg2); // Subtract second operand from R0
+            fprintf(fp2,"\nMOV %s,R0",result); // Move result to its corresponding memory location
+        }
+
+        if(strcmp(op,"/")==0) // If operator is division
+        {
+            fprintf(fp2,"\nMOV R0,%s",arg1); // Move first operand to register R0
+            fprintf(fp2,"\nDIV R0,%s",arg2); // Divide R0 by second operand
+            fprintf(fp2,"\nMOV %s,R0",result); // Move result to its corresponding memory location
+        }
+
+        if(strcmp(op,"=")==0) // If operator is assignment
+        {
+            fprintf(fp2,"\nMOV R0,%s",arg1); // Move operand to register R0
+            fprintf(fp2,"\nMOV %s,R0",result); // Move result to its corresponding memory location
+        }
+    }
+
+    fclose(fp1); // Close input file
+    fclose(fp2); // Close output file
+    getch(); // Wait for user input
+}

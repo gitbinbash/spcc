@@ -1,0 +1,159 @@
+Design and Implementation of Macro Processor.
+==================================
+main.c
+#include<stdio.h> 
+#include<conio.h> 
+#include<string.h> 
+#include<stdlib.h> 
+int main() 
+{ 
+FILE *f1,*f2,*f3,*f4,*f5; 
+int i,len; 
+char mne[20],opnd[20],la[20],name[20],mne1[20],opnd1[20],arg[20]; 
+f1=fopen("minp2.txt","r"); 
+f2=fopen("ntab2.txt","r"); 
+f3=fopen("dtab2.txt","r"); 
+f4=fopen("atab2.txt","w+"); 
+f5=fopen("op2.txt","w"); 
+fscanf(f1,"%s%s%s",la,mne,opnd); 
+while(strcmp(mne,"END")!=0) 
+{ 
+if(strcmp(mne,"MACRO")==0) 
+{ 
+fscanf(f1,"%s%s%s",la,mne,opnd); 
+while(strcmp(mne,"MEND")!=0) 
+fscanf(f1,"%s%s%s",la,mne,opnd); 
+} 
+else 
+{ 
+fscanf(f2,"%s",name); 
+if(strcmp(mne,name)==0) 
+{ 
+len=strlen(opnd); 
+for(i=0;i<len;i++) 
+{ 
+if(opnd[i]!=',') 
+fprintf(f4,"%c",opnd[i]); 
+else 
+fprintf(f4,"\n"); 
+} 
+fseek(f2,SEEK_SET,0); 
+fseek(f4,SEEK_SET,0); 
+fscanf(f3,"%s%s",mne1,opnd1); 
+fprintf(f5,".\t%s\t%s\n",mne1,opnd); 
+fscanf(f3,"%s%s",mne1,opnd1); 
+while(strcmp(mne1,"MEND")!=0) 
+{ 
+if((opnd1[0]=='&')) 
+{ 
+fscanf(f4,"%s",arg); 
+fprintf(f5,"-\t%s\t%s\n",mne1,arg); 
+} 
+else 
+fprintf(f5,"-\t%s\t%s\n",mne1,opnd1); 
+fscanf(f3,"%s%s",mne1,opnd1); 
+} 
+} 
+else 
+fprintf(f5,"%s\t%s\t%s\n",la,mne,opnd); 
+} 
+fscanf(f1,"%s%s%s",la,mne,opnd); 
+} 
+fprintf(f5,"%s\t%s\t%s\n",la,mne,opnd); 
+fclose(f1); 
+fclose(f2); 
+fclose(f3); 
+fclose(f4); 
+fclose(f5); 
+printf("pass2"); 
+getch(); 
+}
+==================================
+minp2.txt
+EX1 MACRO	&A,&B
+-	LDA &A
+-	STA &B
+-	MEND	-
+SAMPLE	START	1000
+-	EX1 N1,N2
+N1	RESW	1
+N2	RESW	1
+-	END -
+==========
+dtab2.txt
+EX1 &A,&B
+LDA &A
+STA &B
+MEND
+==========
+ntab2.txt
+EX1
+==========
+output:
+atab2.txt
+op2.txt
+========================
+#include <stdio.h> // include standard input-output library
+#include <conio.h> // include console input-output library
+#include <string.h> // include string manipulation library
+#include <stdlib.h> // include standard library
+
+int main() // main function
+{ 
+    FILE *f1, *f2, *f3, *f4, *f5; // declare file pointers
+    int i, len; // declare variables
+    char mne[20], opnd[20], la[20], name[20], mne1[20], opnd1[20], arg[20]; // declare character arrays for storing strings
+
+    f1 = fopen("minp2.txt", "r"); // open input file for reading
+    f2 = fopen("ntab2.txt", "r"); // open table file for reading
+    f3 = fopen("dtab2.txt", "r"); // open definition file for reading
+    f4 = fopen("atab2.txt", "w+"); // open argument file for writing
+    f5 = fopen("op2.txt", "w"); // open output file for writing
+
+    fscanf(f1, "%s%s%s", la, mne, opnd); // read first line from input file
+    while(strcmp(mne, "END") != 0) // loop until "END" directive is encountered
+    { 
+        if(strcmp(mne, "MACRO") == 0) // check if current line is macro definition
+        { 
+            fscanf(f1, "%s%s%s", la, mne, opnd); // read next line
+            while(strcmp(mne, "MEND") != 0) // loop until end of macro
+                fscanf(f1, "%s%s%s", la, mne, opnd); // read and discard all lines until MEND
+        } 
+        else // current line is not a macro definition
+        { 
+            fscanf(f2, "%s", name); // read macro name from table file
+            if(strcmp(mne, name) == 0) // check if current line matches macro name
+            { 
+                len = strlen(opnd); // get length of macro arguments
+                for(i = 0; i < len; i++) // loop through macro arguments
+                { 
+                    if(opnd[i] != ',') // if not a comma, write character to argument file
+                        fprintf(f4, "%c", opnd[i]); 
+                    else // if comma, write newline character to argument file
+                        fprintf(f4, "\n"); 
+                } 
+                fseek(f2, SEEK_SET, 0); // reset table file pointer to beginning
+                fseek(f4, SEEK_SET, 0); // reset argument file pointer to beginning
+                fscanf(f3, "%s%s", mne1, opnd1); // read first line of definition file
+                fprintf(f5, ".\t%s\t%s\n", mne1, opnd); // write macro call to output file
+                fscanf(f3, "%s%s", mne1, opnd1); // read next line of definition file
+                while(strcmp(mne1, "MEND") != 0) // loop until end of macro
+                { 
+                    if(opnd1[0] == '&') // if argument is used in macro definition
+                    { 
+                        fscanf(f4, "%s", arg); // read argument from argument file
+                        fprintf(f5, "-\t%s\t%s\n", mne1, arg); // write macro instruction to output
+===============================
+This C program is a two-pass assembler for Macro Processor. It reads an input file minp2.txt which contains the source code in Macro Processor language and generates an output file op2.txt containing the corresponding assembly code.
+
+The program uses five file pointers f1, f2, f3, f4, f5 to access the input and output files. It also declares several character arrays mne, opnd, la, name, mne1, opnd1, and arg to hold various strings.
+
+The program begins by opening the input and output files using fopen function. It then reads the first line of the input file using fscanf function and enters into a loop that continues until the end of the input file is reached (END is encountered).
+
+Within the loop, the program checks if the current line contains a macro definition (MACRO), and if so, it reads and discards all the lines until the macro end is encountered (MEND). If the current line is not a macro definition, the program searches for the corresponding macro name in ntab2.txt file using fscanf function. If a match is found, it writes the macro arguments to atab2.txt file and replaces the macro call with the corresponding assembly code in op2.txt file. If a match is not found, it writes the current line to op2.txt file unchanged.
+
+At the end of the loop, the program writes the last line of the input file to op2.txt file and closes all the files using fclose function.
+
+Finally, the program prints the message "pass2" to the console using printf function and waits for a key press using getch function.
+
+Overall, this C program demonstrates the principles of two-pass assemblers and macro processors in assembly language programming.
