@@ -9,4 +9,4 @@ gcc {{filename.c}} -o {{finname}}.out
 
 
 lex test1.l
-cc lex.yy.c –ll 
+gcc lex.yy.c –ll 
