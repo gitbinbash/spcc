@@ -1,0 +1,35 @@
+Use of tools LEX and YACC:
+=======================
+test.l:
+%{
+ #include<stdio.h>
+%}
+LETTER[a-z][A-Z]
+DIGIT[0-9]
+%%
+begin { printf("Recognized Keyword: %s\n", yytext);}
+if {printf("Recognised Keyword: %s\n", yytext);}
+{LETTER}({LETTER}|{DIGIT})* {printf("Recognized ID: %s\n",yytext);}
+%%
+main()
+{
+yylex();
+}
+============================
+sudo apt-get install flex bison
+
+lex test.l
+gcc lex.yy.c
+./a.out
+===========================
+This is a Lex code that defines lexical rules to recognize keywords and identifiers in a program. Here is an explanation of each part of the code:
+
+The %{ and %} symbols enclose C code that will be copied verbatim to the generated Lex code.
+LETTER and DIGIT are regular expressions that define character classes. LETTER matches any uppercase or lowercase letter, and DIGIT matches any digit between 0 and 9.
+The %% symbol separates the definitions of the lexical analyzer.
+The begin keyword declares the start state of the lexical analyzer. In this case, the start state prints a message indicating that a keyword has been recognized.
+The if keyword defines a regular expression that matches the keyword "if". When this regular expression is recognized, the lexical analyzer prints a message.
+{LETTER}({LETTER}|{DIGIT})* defines a regular expression that matches an identifier. An identifier is a sequence of one or more letters or digits, starting with a letter. When an identifier is recognized, the lexical analyzer prints a message.
+The second %% symbol marks the end of the lexical analyzer definitions.
+The main() function initializes the lexical analyzer and calls the yylex() function to begin scanning input text for matches to the defined patterns.
+===================
